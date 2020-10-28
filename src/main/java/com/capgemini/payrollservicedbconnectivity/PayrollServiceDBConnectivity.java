@@ -2,6 +2,7 @@ package com.capgemini.payrollservicedbconnectivity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +16,6 @@ public class PayrollServiceDBConnectivity {
 
 	public static void main(String[] args) throws DatabaseException {
 
-		
 		String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
 		String userName = "root";
 		String password = "123qwe";
@@ -36,22 +36,25 @@ public class PayrollServiceDBConnectivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Statement stmt = null;
+		PreparedStatement preparedStmt = null;
 		ResultSet employeePayroll = null;
 		try {
-			stmt = con.createStatement();
-			employeePayroll = stmt.executeQuery("select * from employee_payroll");
+			preparedStmt = con.prepareStatement("update employee_payroll set basic_pay = '350000' where name = 'Terissa' ");
+			preparedStmt.executeUpdate();
+			
+			// Checking if value is updated
+			employeePayroll = preparedStmt.executeQuery("select * from employee_payroll where name ='Terissa'");
 			while (employeePayroll.next()) {
-				log.info(employeePayroll.getInt(1)+" "+employeePayroll.getString(2)+" "
-						+employeePayroll.getString(3)+" "+employeePayroll.getString(4)+" "
-						+employeePayroll.getString(5)+" "+employeePayroll.getString(6)+" "
-						+employeePayroll.getDouble(7)+" "+employeePayroll.getDouble(8)+" "
-						+employeePayroll.getDouble(9)+" "+employeePayroll.getDouble(10)+" "
-						+employeePayroll.getDouble(11)+" "+employeePayroll.getDate(12));
+				log.info(employeePayroll.getInt(1) + " " + employeePayroll.getString(2) + " "
+						+ employeePayroll.getString(3) + " " + employeePayroll.getString(4) + " "
+						+ employeePayroll.getString(5) + " " + employeePayroll.getString(6) + " "
+						+ employeePayroll.getDouble(7) + " " + employeePayroll.getDouble(8) + " "
+						+ employeePayroll.getDouble(9) + " " + employeePayroll.getDouble(10) + " "
+						+ employeePayroll.getDouble(11) + " " + employeePayroll.getDate(12));
 			}
-			}catch(SQLException e) {
-				throw new DatabaseException("Error in retrieving data from database");
-			}
+		} catch (SQLException e) {
+			throw new DatabaseException("Error in retrieving data from database");
+		}
 	}
 
 	// Printing the available classes
