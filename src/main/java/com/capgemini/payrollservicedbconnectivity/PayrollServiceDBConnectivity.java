@@ -39,15 +39,13 @@ public class PayrollServiceDBConnectivity {
 		ResultSet employeePayroll = null;
 		try {
 			// selecting employee using prepare statement
-			preparedStmt = con.prepareStatement("select * from employee_payroll where start between cast('2018-01-01' as date) and date(now())");
+			preparedStmt = con.prepareStatement(
+					"select gender,count(gender),sum(basic_pay),avg(basic_pay),min(basic_pay),max(basic_pay) from employee_payroll group by GENDER;");
 			employeePayroll = preparedStmt.executeQuery();
 			while (employeePayroll.next()) {
-				log.info(employeePayroll.getInt(1) + " " + employeePayroll.getString(2) + " "
-						+ employeePayroll.getString(3) + " " + employeePayroll.getString(4) + " "
-						+ employeePayroll.getString(5) + " " + employeePayroll.getString(6) + " "
-						+ employeePayroll.getDouble(7) + " " + employeePayroll.getDouble(8) + " "
-						+ employeePayroll.getDouble(9) + " " + employeePayroll.getDouble(10) + " "
-						+ employeePayroll.getDouble(11) + " " + employeePayroll.getDate(12));
+				log.info(" " + employeePayroll.getString(1) + " " + employeePayroll.getInt(2) + " "
+						+ employeePayroll.getDouble(3) + " " + employeePayroll.getDouble(4) + " "
+						+ employeePayroll.getDouble(5) + " " + employeePayroll.getDouble(6));
 			}
 		} catch (SQLException e) {
 			throw new DatabaseException("Error in retrieving data from database");
