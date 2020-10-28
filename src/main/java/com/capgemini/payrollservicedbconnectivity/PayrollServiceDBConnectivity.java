@@ -39,7 +39,7 @@ public class PayrollServiceDBConnectivity {
 		ResultSet employeePayroll = null;
 		try {
 			// selecting employee using prepare statement
-			preparedStmt = con.prepareStatement("select * from employee_payroll group by name");
+			preparedStmt = con.prepareStatement("select * from employee_payroll where start between cast('2018-01-01' as date) and date(now())");
 			employeePayroll = preparedStmt.executeQuery();
 			while (employeePayroll.next()) {
 				log.info(employeePayroll.getInt(1) + " " + employeePayroll.getString(2) + " "
