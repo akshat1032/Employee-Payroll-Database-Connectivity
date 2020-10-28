@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Driver;
 import java.util.Enumeration;
 import java.util.logging.*;
@@ -39,11 +38,9 @@ public class PayrollServiceDBConnectivity {
 		PreparedStatement preparedStmt = null;
 		ResultSet employeePayroll = null;
 		try {
-			preparedStmt = con.prepareStatement("update employee_payroll set basic_pay = '350000' where name = 'Terissa' ");
-			preparedStmt.executeUpdate();
-			
-			// Checking if value is updated
-			employeePayroll = preparedStmt.executeQuery("select * from employee_payroll where name ='Terissa'");
+			// selecting employee using prepare statement
+			preparedStmt = con.prepareStatement("select * from employee_payroll group by name");
+			employeePayroll = preparedStmt.executeQuery();
 			while (employeePayroll.next()) {
 				log.info(employeePayroll.getInt(1) + " " + employeePayroll.getString(2) + " "
 						+ employeePayroll.getString(3) + " " + employeePayroll.getString(4) + " "
